@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Montserrat-Local';
+  src: url('Montserrat-Bold.woff2') format('woff2'),
+    url('Montserrat-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo-Local';
+  src: url('Cairo-Regular.woff2') format('woff2'),
+    url('Cairo-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
