@@ -2,15 +2,34 @@ import React from 'react';
 import './Login.css';
 import axios from 'axios';
 import { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+    LOGIN
+} from '../constants/actionTypes';
+
+const mapStateToProps = state => ({ ...state.auth });
+
+
+const mapDispatchToProps = dispatch => ({
+
+    onSubmit: (data) => {
+        console.log("Before Dispatch")
+        dispatch({ type: LOGIN, payload:  data})
+    }
+
+
+});
+
+
 class Login extends Component {
     constructor(props) {
         super();
         console.log(props)
     }
-    
+
     state = {
-        email: "",
-        password: ""
+        email: "b1234@gmail.com",
+        password: "b12345678"
     }
 
     login = async (e) => {
@@ -33,6 +52,7 @@ class Login extends Component {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('userId', response.data.userId);
                 this.props.history.push("/");
+                 this.props.onSubmit(response.data)
             }
 
         });
@@ -43,14 +63,13 @@ class Login extends Component {
         this.setState({
             email: ev.target.value
         })
-        //this.state.email = ev.target.value
-        console.log(this.state);
+      
     }
     changePassword = (ev) => {
         this.setState({
             password: ev.target.value
         })
-        console.log(this.state);
+       
     }
 
 
@@ -67,7 +86,7 @@ class Login extends Component {
                                 className="form-control form-control-lg"
                                 type="text"
                                 placeholder="Email"
-
+                                value={this.state.email}
                                 onChange={this.changeEmail} />
                         </fieldset>
 
@@ -76,7 +95,7 @@ class Login extends Component {
                                 className="form-control form-control-lg"
                                 type="password"
                                 placeholder="Password"
-
+                                value={this.state.password}
                                 onChange={this.changePassword} />
                         </fieldset>
 
@@ -95,5 +114,5 @@ class Login extends Component {
 
     }
 }
-
-export default Login;
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// export default Login;

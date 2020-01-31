@@ -1,75 +1,98 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
+import { connect } from 'react-redux';
+import { LOGOUT, LOGIN } from '../constants/actionTypes';
 
+
+const mapStateToProps = state => ({ ...state.auth });
+
+
+const mapDispatchToProps = dispatch => ({
+  logOut: () => {
+    console.log("Before Dispatch");
+    localStorage.clear();
+    dispatch({ type: LOGOUT, payload: null })
+  },
+  resetToken: (data) => {
+    console.log("Before Dispatch")
+    dispatch({ type: LOGIN, payload: data })
+  }
+
+});
 
 
 
 const LoggedOutView = () => {
-  if (!localStorage.getItem("token")) {
-    return (
+  return (
 
-      <div className="container">
-        <Link to="/" className="nav-link">
-          Home
+    <div className="container">
+      <Link to="/" className="nav-link">
+        Home
           </Link>
-        <Link to="/login" className="nav-link">
-          Sign in
+      <Link to="/login" className="nav-link">
+        Sign in
           </Link>
-        <Link to="/signup" className="nav-link">
-          Sign up
+      <Link to="/signup" className="nav-link">
+        Sign up
           </Link>
-      </div>
+    </div>
 
 
-    );
-  }
-  return null;
+  );
 };
 
 
 
-const LoggedInView = () => {
-  if (localStorage.getItem("token")) {
-    return (
+const LoggedInView = (props) => {
+  return (
 
-      <div className="container">
-        <Link to="/" className="nav-link">
-          Home
+    <div className="container">
+      <Link to="/" className="nav-link">
+        Home
         </Link>
 
-        <Link to="/add-item" className="nav-link">
-          Add Item
+      <Link to="/add-item" className="nav-link">
+        Add Item
         </Link>
-        <Link to="/my-ads" className="nav-link">
-          My Ads
+      <Link to="/my-ads" className="nav-link">
+        My Ads
         </Link>
 
-        <Link to="/" className="nav-link right-end" onClick={() => { localStorage.clear();  }}>
-          Log Out
+      <Link to="/" className="nav-link right-end" onClick={props.logOut}>
+        Log Out
         </Link>
-      </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 };
 
 
 
 class Header extends React.Component {
+  componentDidMount() {
+    if (localStorage.getItem('token')) {
+      this.props.resetToken({
+        token: localStorage.getItem('token'),
+        userId: localStorage.getItem('userId')
+      })
+    }
+  }
+
 
   render() {
+    console.log(this.props)
     return (
       <nav className="header">
         <div className="container">
-          <LoggedOutView />
 
-          <LoggedInView />
+          {this.props.token ? <LoggedInView logOut={this.props.logOut} />
+            :
+            <LoggedOutView />}
         </div>
       </nav>
     );
   }
 }
 
-export default Header;
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
