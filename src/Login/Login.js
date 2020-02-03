@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => ({
 
     onSubmit: (data) => {
         console.log("Before Dispatch")
-        dispatch({ type: LOGIN, payload:  data})
+        dispatch({ type: LOGIN, payload: data })
     }
 
 
@@ -52,7 +52,7 @@ class Login extends Component {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('userId', response.data.userId);
                 this.props.history.push("/");
-                 this.props.onSubmit(response.data)
+                this.props.onSubmit(response.data)
             }
 
         });
@@ -63,13 +63,13 @@ class Login extends Component {
         this.setState({
             email: ev.target.value
         })
-      
+
     }
     changePassword = (ev) => {
         this.setState({
             password: ev.target.value
         })
-       
+
     }
 
 

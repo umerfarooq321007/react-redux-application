@@ -2,6 +2,28 @@ import React from 'react';
 import './Signup.css';
 import axios from 'axios';
 import { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+    REGISTER
+} from '../constants/actionTypes';
+
+
+
+const mapStateToProps = state => ({ ...state.auth });
+
+
+const mapDispatchToProps = dispatch => ({
+
+    onSubmit: (data) => {
+        console.log("Before Dispatch")
+        dispatch({ type: REGISTER, payload: data })
+    }
+
+
+});
+
+
+
 class Signup extends Component {
     constructor() {
         super();
@@ -37,6 +59,7 @@ class Signup extends Component {
                     console.log(resData.token)
                     localStorage.setItem('token', resData.token.token);
                     localStorage.setItem('userId', resData.token.userId);
+                    this.props.onSubmit({ token: resData.token.token, userId: resData.token.userId })
                 }
             }
         });
@@ -107,4 +130,4 @@ class Signup extends Component {
     }
 }
 
-export default Signup;
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
