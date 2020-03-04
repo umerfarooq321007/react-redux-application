@@ -3,6 +3,7 @@ import './Login.css';
 import axios from 'axios';
 import { Component } from 'react';
 import { connect } from 'react-redux';
+import SimpleReactValidator from 'simple-react-validator';
 import {
     LOGIN
 } from '../constants/actionTypes';
@@ -25,6 +26,7 @@ class Login extends Component {
     constructor(props) {
         super();
         console.log(props)
+        this.validator = new SimpleReactValidator();
     }
 
     state = {
@@ -33,29 +35,38 @@ class Login extends Component {
     }
 
     login = async (e) => {
-        console.log(this.state)
-        axios.post(
-            'http://18.219.17.99:3000/users/login',
-            {
-                "email": this.state.email,
-                "password": this.state.password
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                    //other header fields
+        if (this.validator.allValid()) {
+            console.log(this.state)
+            axios.post(
+                'http://18.219.17.99:3000/users/login',
+                {
+                    "email": this.state.email,
+                    "password": this.state.password
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                        //other header fields
+                    }
                 }
-            }
-        ).then((response) => {
-            console.log(response.data);
-            if (response.data) {
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('userId', response.data.userId);
-                this.props.history.push("/");
-                this.props.onSubmit(response.data)
-            }
+            ).then((response) => {
+                console.log(response.data);
+                if (response.data) {
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('userId', response.data.userId);
+                    this.props.history.push("/");
+                    this.props.onSubmit(response.data)
+                }
 
-        });
+            });
+        } else {
+            this.validator.showMessages();
+            // rerender to show messages for the first time
+            // you can use the autoForceUpdate option to do this automatically`
+            this.forceUpdate();
+        }
+
+
 
     }
 
@@ -87,7 +98,10 @@ class Login extends Component {
                                 type="text"
                                 placeholder="Email"
                                 value={this.state.email}
-                                onChange={this.changeEmail} />
+                                onChange={this.changeEmail}
+                                onBlur={() => { this.validator.showMessageFor('email'); this.forceUpdate(); }} />
+
+                            <span className="error">{this.validator.message('email', this.state.email, 'required|email')}</span>
                         </fieldset>
 
                         <fieldset className="form-group">
@@ -96,7 +110,9 @@ class Login extends Component {
                                 type="password"
                                 placeholder="Password"
                                 value={this.state.password}
-                                onChange={this.changePassword} />
+                                onChange={this.changePassword}
+                                onBlur={() => { this.validator.showMessageFor('password'); this.forceUpdate(); }} />
+                            <span className="error">{this.validator.message('password', this.state.password, 'required')}</span>
                         </fieldset>
 
                         <button
