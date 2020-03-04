@@ -2,9 +2,11 @@ import React from 'react';
 import './AddItem.css';
 import axios from 'axios';
 import { Component } from 'react';
+import SimpleReactValidator from 'simple-react-validator';
 class AddItem extends Component {
     constructor() {
         super();
+        this.validator = new SimpleReactValidator();
     }
     state = {
         item: {
@@ -16,8 +18,9 @@ class AddItem extends Component {
     }
 
     addItem = async (e) => {
-        console.log(this.state.item)
-        const response = axios.post(
+        if (this.validator.allValid()) {
+            console.log(this.state.item)
+            const response = axios.post(
             'http://18.219.17.99:3000/ads/',
             {
                 "item_name": this.state.item.item_name,
@@ -31,12 +34,19 @@ class AddItem extends Component {
                     //other header fields
                 }
             }
-        ).then((response) => {
-            console.log("Add Item Response")
-            console.log(response.data);
-            this.uploadHandler();
+            ).then((response) => {
+                console.log("Add Item Response")
+                console.log(response.data);
+                this.uploadHandler();
 
-        });
+            });
+            } else {
+                this.validator.showMessages();
+                // rerender to show messages for the first time
+                // you can use the autoForceUpdate option to do this automatically`
+                this.forceUpdate();
+          }
+        
     }
 
     componentDidMount() {
@@ -106,7 +116,10 @@ class AddItem extends Component {
                                 type="text"
                                 placeholder="Item name"
 
-                                onChange={this.changeItemName} />
+                                onChange={this.changeItemName}
+                                onBlur={() => { this.validator.showMessageFor('itemName'); this.forceUpdate(); }} />
+
+                            <span className="error">{this.validator.message('itemName', this.state.item.item_name, 'required')}</span>
                         </fieldset>
                         <fieldset className="form-group">
                             <input
@@ -114,7 +127,10 @@ class AddItem extends Component {
                                 type="text"
                                 placeholder="Item Description"
 
-                                onChange={this.changeItemDescription} />
+                                onChange={this.changeItemDescription}
+                                onBlur={() => { this.validator.showMessageFor('itemDescription'); this.forceUpdate(); }} />
+
+                            <span className="error">{this.validator.message('itemDescription', this.state.item.item_description, 'required')}</span>
                         </fieldset>
                         <fieldset className="form-group">
                             <input
@@ -122,7 +138,9 @@ class AddItem extends Component {
                                 type="text"
                                 placeholder="Price"
 
-                                onChange={this.changeItemPrice} />
+                                onChange={this.changeItemPrice} 
+                                onBlur={() => { this.validator.showMessageFor('price'); this.forceUpdate(); }} />
+                            <span className="error">{this.validator.message('price', this.state.item.price, 'required|numeric')}</span>
                           
                         </fieldset>
                         <fieldset className="form-group">
