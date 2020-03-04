@@ -18,6 +18,7 @@ export const CHANGE_TAB = 'CHANGE_TAB';
 export const PROFILE_PAGE_LOADED = 'PROFILE_PAGE_LOADED';
 export const PROFILE_PAGE_UNLOADED = 'PROFILE_PAGE_UNLOADED';
 export const LOGIN = 'LOGIN';
+export const LOADDATA = 'LOADDATA';
 export const LOGOUT = 'LOGOUT';
 export const REGISTER = 'REGISTER';
 export const LOGIN_PAGE_UNLOADED = 'LOGIN_PAGE_UNLOADED';

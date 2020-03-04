@@ -3,18 +3,32 @@ import './Ads.css';
 import axios from 'axios';
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { LOADDATA } from '../constants/actionTypes';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => ({ ...state.item });
+
+
+const mapDispatchToProps = dispatch => ({
+
+    onLoad: (data) => {
+        dispatch({ type: LOADDATA, payload: data })
+    }
+
+
+});
+
 class Ads extends Component {
     constructor() {
         super();
     }
-    state = {
-        data: []
-    }
+    
     loadData = async (e) => {
         console.log("Test");
         const response = axios.get("http://18.219.17.99:3000/ads?filter[offset]=0&filter[limit]=100&filter[skip]=0"
         ).then((response) => {
             this.setState({ data: response.data })
+            this.props.onLoad(response.data)
             console.log(this.state.data);
 
         });
@@ -28,7 +42,8 @@ class Ads extends Component {
         this.loadData()
     }
     renderData = () => {
-        return this.state.data.map((item) => {
+        console.log(this.props)
+        return this.props.items.map((item) => {
             const { id, item_name, item_description } = item //destructuring
             return (
                 <tr key={id}>
@@ -64,4 +79,4 @@ class Ads extends Component {
     }
 }
 
-export default Ads;
+export default connect(mapStateToProps, mapDispatchToProps)(Ads);
