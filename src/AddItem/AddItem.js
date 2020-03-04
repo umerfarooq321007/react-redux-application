@@ -16,7 +16,7 @@ class AddItem extends Component {
         },
         selectedFile: []
     }
-
+ 
     addItem = async (e) => {
         if (this.validator.allValid()) {
             console.log(this.state.item)
