@@ -67,7 +67,7 @@ class App extends Component {
       <div className="App">
         <Header></Header>
         <div className="header">
-          <h1>
+          <h1 className="app-title">
             SBAY
         </h1>
         </div>

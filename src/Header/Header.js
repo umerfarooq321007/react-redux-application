@@ -27,7 +27,7 @@ const LoggedOutView = () => {
   return (
 
     <div className="container">
-      <Link to="/" className="nav-link">
+      <Link to="/" className="nav-link home">
         Home
           </Link>
       <Link to="/login" className="nav-link">
