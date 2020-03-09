@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => ({
 const LoggedOutView = () => {
   return (
 
-    <div className="container">
+    <div className="container loggedOutView">
       <Link to="/" className="nav-link home">
         Home
           </Link>
@@ -47,7 +47,7 @@ const LoggedOutView = () => {
 const LoggedInView = (props) => {
   return (
 
-    <div className="container">
+    <div className="container loggedInView">
       <Link to="/" className="nav-link">
         Home
         </Link>

@@ -96,7 +96,9 @@ class Login extends Component {
                             <input
                                 className="form-control form-control-lg"
                                 type="text"
+                                id="email"
                                 placeholder="Email"
+                                name="email"
                                 value={this.state.email}
                                 onChange={this.changeEmail}
                                 onBlur={() => { this.validator.showMessageFor('email'); this.forceUpdate(); }} />
@@ -109,6 +111,7 @@ class Login extends Component {
                                 className="form-control form-control-lg"
                                 type="password"
                                 placeholder="Password"
+                                name="password"
                                 value={this.state.password}
                                 onChange={this.changePassword}
                                 onBlur={() => { this.validator.showMessageFor('password'); this.forceUpdate(); }} />
@@ -117,6 +120,7 @@ class Login extends Component {
 
                         <button
                             className="btn btn-lg btn-primary pull-xs-right"
+                            data-testid="loginBtn"
                             type="button" onClick={this.login}>
                             Sign in
                   </button>
